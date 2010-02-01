@@ -157,4 +157,14 @@ public class PixToolsVector3d {
 	public String toString() {
 		return "Vector3d[" + x + ", " + y + ", " + z + "]";
 	}
+	
+	/** 
+	 * @return random normalized 3d vector
+	 */
+	public static PixToolsVector3d createRandomVector(){
+		return new PixToolsVector3d(
+				Math.random()-0.5d,Math.random()-0.5d,Math.random()-0.5d)
+			.normalized();
+	}
+	
 }

@@ -702,7 +702,21 @@ public class PixTools {
 
 			res.append(pixel);
 		}
-		return res.build();
+		
+//make sure that center vector is contained in result set. 
+//this is HOTFIX for rounding errors in InRing method
+		LongRangeSet ret2 = res.build();
+		long centerIpix = vect2pix_ring(nside,vector);
+		if(!ret2.contains(centerIpix)){
+			//construct new long range set and add it content to result
+			LongRangeSetBuilder b2 = new LongRangeSetBuilder();
+			b2.append(centerIpix);
+			ret2 = ret2.union(b2.build());
+		}
+				
+		return ret2;
+		
+
 	}
 	
 	/**

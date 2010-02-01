@@ -1179,5 +1179,24 @@ public class PixToolsTest extends TestCase {
     }
     
 
+    public void testQueryCircle(){
+    	PixTools pt = new PixTools();
+    	
+    	long nside = 512;
+
+     	double angle = Math.toRadians(0.011451621372724687);
+   	   	PixToolsVector3d v = new PixToolsVector3d(0.8956388362603873, -1.838600645782914E-4, 0.44478201534866);
+    	
+   	   	//convert vector to IPIX
+    	long ipix = pt.vect2pix_ring(nside, v);
+    	//and query circle
+    	LongRangeSet r = pt.query_disc(nside,v,angle,true);
+    	
+    	//now make test that IPIX is in Circle, this will fail
+    	System.out.println("ipix = "+ipix);
+    	System.out.println("disc: "+r);
+    	assertTrue("pixel not found in disc",r.contains(ipix));
+
+    }
 }
 
