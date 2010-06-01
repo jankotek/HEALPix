@@ -216,19 +216,37 @@ public class LongRangeSet implements Serializable, Iterable<Long>{
     }
     
     public boolean containsAll(long first, long last){
-    	//TODO optimize this
-    	for(long i=first;i<=last; i++)
-    		if(!contains(i))
-    			return false;
-    	return true;
+    	if(first>last)
+    		throw new IllegalArgumentException("First is bigger then last");
+    	if(isEmpty() || last < first() || first>last())
+    		return false;
+
+    	int firstIndex = Arrays.binarySearch(ranges, first);
+    	int lastIndex = Arrays.binarySearch(ranges, last);
+    	
+    	if(firstIndex>=0 && lastIndex>=0)
+    		return lastIndex - firstIndex <2;
+    	return false;
     }
 
     public boolean containsAny(long first, long last){
-    	//TODO optimize this
-    	for(long i=first;i<=last; i++)
-    		if(contains(i))
-    			return true;
-    	return false;    	
+    	if(first>last)
+    		throw new IllegalArgumentException("First is bigger then last");
+    	if(isEmpty() || last < first() || first>last())
+    		return false;
+
+    	int firstIndex = Arrays.binarySearch(ranges, first);    	
+    	int lastIndex = Arrays.binarySearch(ranges, last);
+
+    	
+    	//System.out.println(firstIndex + " - "+lastIndex);
+    	
+    	
+    	if(firstIndex <0 && lastIndex<0 && firstIndex%2==-1 && firstIndex == lastIndex)
+    		return false;
+
+
+    	return true;
     }
     
 

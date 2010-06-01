@@ -144,6 +144,48 @@ public class LongRangeSetTest extends TestCase {
     	
     	assertEquals(r3,r1.substract(r2));
     }
+    
+    public void testContainsAll(){
+    	b.appendRange(20, 30);
+    	b.appendRange(40, 50);
+    	LongRangeSet r1 = b.build();
+    	
+    	assertFalse(r1.containsAll(0,10));
+    	assertFalse(r1.containsAll(10,20));
+    	assertFalse(r1.containsAll(19,19));
+    	assertTrue(r1.containsAll(20,20));
+    	assertFalse(r1.containsAll(21,21));
+    	assertTrue(r1.containsAll(20,30));
+    	assertFalse(r1.containsAll(25,35));
+    	assertTrue(r1.containsAll(30,30));
+    	assertFalse(r1.containsAll(31,31));
+    	assertFalse(r1.containsAll(35,37));
+    	assertFalse(r1.containsAll(35,45));;
+    	assertTrue(r1.containsAll(40,40));
+    	assertFalse(r1.containsAll(45,55));
+    	assertFalse(r1.containsAll(60,70));    	
+    }
 
+
+    public void testContainsAny(){
+    	b.appendRange(20, 30);
+    	b.appendRange(40, 50);
+    	LongRangeSet r1 = b.build();
+    	
+    	assertFalse(r1.containsAny(0,10));
+    	assertTrue(r1.containsAny(10,20));
+    	assertFalse(r1.containsAny(19,19));
+    	assertTrue(r1.containsAny(20,20));
+    	assertTrue(r1.containsAny(21,21));
+    	assertTrue(r1.containsAny(20,30));
+    	assertTrue(r1.containsAny(25,35));    	
+    	assertTrue(r1.containsAny(30,30));
+    	assertFalse(r1.containsAny(31,31));
+    	assertFalse(r1.containsAny(35,37));
+    	assertTrue(r1.containsAny(35,45));;
+    	assertTrue(r1.containsAny(40,40));
+    	assertTrue(r1.containsAny(45,55));
+    	assertFalse(r1.containsAny(60,70));    	
+    }
 
 }
