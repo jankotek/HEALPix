@@ -5,7 +5,10 @@
 
 package org.asterope.healpix;
 
-import java.io.Serializable;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -25,12 +28,12 @@ import java.util.NoSuchElementException;
  * Inspired by Justin F. Chapweske and Soren Bak
  * @author Jan Kotek
  */
-public class LongRangeSet implements Serializable, Iterable<Long>{
+public class LongRangeSet implements Externalizable, Iterable<Long>{
 
     private static final long serialVersionUID = -7543399451387806240L;
 
     /** sorted ranges, even is first, odd is last */
-    protected final long[] ranges;
+    protected long[] ranges;
 
     /** 
      * Construct new LongRangeSet from given values
@@ -560,5 +563,13 @@ public class LongRangeSet implements Serializable, Iterable<Long>{
      */
 	public boolean isEmpty() { 
 		return  ranges.length==0;
+	}
+
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+		ranges = LongRangeSetBuilder.readFrom(in).ranges;
+	}
+
+	public void writeExternal(ObjectOutput out) throws IOException {
+		LongRangeSetBuilder.writeTo(out, this);
 	}
 }

@@ -5,6 +5,11 @@
 
 package org.asterope.healpix;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.OutputStream;
+
 /**
  * Builder for LongRangeSet . LongRangeSet is unmodifiable, this class is 
  * 'factory' to create new instances.
@@ -131,6 +136,43 @@ public class LongRangeSetBuilder {
     	if(pos == 0)
     		return EMPTY;
         return new LongRangeSet(ranges,pos);
+    }
+    
+    /**
+     * Write LongRangeSet into stream in an space efficient way.
+     * Delta compression is used and Longs are stored in packed form. 
+     * @param out
+     * @param rs
+     * @throws IOException
+     */
+    public static void writeTo(DataOutput out,LongRangeSet rs) throws IOException{
+    	out.writeInt(rs.ranges.length);
+    	long last = 0;
+    	for(long i:rs.ranges){
+    		//write packed differences between values, this way it ocupies less space
+    		long diff = i - last;
+    		LongPacker.packLong(out, diff);
+    		last = i;
+    	}
+    	
+    }
+    
+    /**
+     * Read LongRangeSet from an input stream
+     * @param in
+     * @return
+     * @throws IOException
+     */
+    public static LongRangeSet readFrom(DataInput in) throws IOException{
+    	int size = in.readInt();
+    	long[] arr = new long[size];
+    	long last = 0;
+    	for(int i =0; i<size;i++){
+    		long v = last + LongPacker.unpackLong(in);
+    		arr[i] = v;
+    		last = v;
+    	}
+    	return new LongRangeSet(arr,size);
     }
 
 
