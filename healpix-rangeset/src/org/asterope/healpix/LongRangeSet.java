@@ -34,6 +34,11 @@ public class LongRangeSet implements Externalizable, Iterable<Long>{
 
     /** sorted ranges, even is first, odd is last */
     protected long[] ranges;
+    
+    /** empty constructor for serialization*/
+    public LongRangeSet() {
+    
+	}
 
     /** 
      * Construct new LongRangeSet from given values
