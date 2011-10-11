@@ -78,7 +78,7 @@ public abstract class LongCollection implements Iterable<Long> {
     public Iterator<Long> iterator() {
         return new Iterator<Long>(){
 
-            LongIterator iter =longIterator();
+            final LongIterator iter =longIterator();
 
             public boolean hasNext() {
                 return iter.hasNext();

@@ -28,7 +28,7 @@ public class HelloWorld {
 		// (80 is because function takes theta instead of DE (distance from north pole))
 		double theta = Math.toRadians(80);		
 		double phi = Math.toRadians(45);
-		PixToolsVector3d point = t.Ang2Vec(theta,phi);
+		Vector3d point = t.Ang2Vec(theta,phi);
 		
 		//convert point in sky to pixel number
 		long ipix = t.vect2pix_ring(nside, point);

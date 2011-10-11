@@ -8,9 +8,9 @@ public class PixToolsUtilsTest extends TestCase {
 	 * @throws Exception
 	 */
 	public void testSurfaceTriangle() throws Exception {
-		PixToolsVector3d v1 = new PixToolsVector3d(1.0, 0.0, 0.0);
-		PixToolsVector3d v2 = new PixToolsVector3d(0.0, 1.0, 0.0);
-		PixToolsVector3d v3 = new PixToolsVector3d(0.0, 0.0, 1.0);
+		Vector3d v1 = new Vector3d(1.0, 0.0, 0.0);
+		Vector3d v2 = new Vector3d(0.0, 1.0, 0.0);
+		Vector3d v3 = new Vector3d(0.0, 0.0, 1.0);
 		double res = PixToolsUtils.SurfaceTriangle(v1, v2, v3);
 		System.out.println("Triangle surface is=" + res / Math.PI
 				+ " steredians");

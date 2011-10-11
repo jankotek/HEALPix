@@ -5,11 +5,14 @@
 
 package org.asterope.healpix;
 
+import sun.reflect.generics.tree.LongSignature;
+
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.NoSuchElementException;
+import java.util.TreeSet;
 
- 
 
 /**
  * Growable long[] array
@@ -27,7 +30,7 @@ public class LongList extends LongCollection implements Serializable {
     }
 
     public void add(long v) {
-        add(size,v);
+        add(size, v);
     }
 
     public LongList() {
@@ -36,6 +39,12 @@ public class LongList extends LongCollection implements Serializable {
     public LongList(LongCollection set) {
         addAll(set);
     }
+
+    public LongList(Collection<Long> s) {
+        for(Long l :s)
+            add(l);
+    }
+
 
 
     public LongList(long[] set) {
@@ -163,5 +172,11 @@ public class LongList extends LongCollection implements Serializable {
     }
 
 
-    
+    public TreeSet<Long> toTreeSet() {
+        TreeSet<Long> ret = new TreeSet<Long>();
+        LongIterator iter = longIterator();
+        while(iter.hasNext())
+            ret.add(iter.next());
+        return ret;
+    }
 }

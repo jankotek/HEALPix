@@ -11,22 +11,22 @@ package org.asterope.healpix;
  * normalized. Mutable version was originally part of java3d vecmath package,
  * was replaced with immutable version inside PixTools jar
  */
-public class PixToolsVector3d {
+public class Vector3d {
 
 	public final double x, y, z;
 
-	public PixToolsVector3d(double x, double y, double z) {
+	public Vector3d(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
-	public final PixToolsVector3d sub(PixToolsVector3d v1) {
-		return new PixToolsVector3d(x - v1.x, y - v1.y, z - v1.z);
+	public final Vector3d sub(Vector3d v1) {
+		return new Vector3d(x - v1.x, y - v1.y, z - v1.z);
 	}
 
-	public final PixToolsVector3d add(PixToolsVector3d v1) {
-		return new PixToolsVector3d(x + v1.x, y + v1.y, z + v1.z);
+	public final Vector3d add(Vector3d v1) {
+		return new Vector3d(x + v1.x, y + v1.y, z + v1.z);
 	}
 
 	/**
@@ -37,7 +37,7 @@ public class PixToolsVector3d {
 	 *            the other vector
 	 * @return the angle in radians in the range [0,PI]
 	 */
-	public final double angle(PixToolsVector3d v1) {
+	public final double angle(Vector3d v1) {
 		// return (double)Math.acos(dot(v1)/v1.length()/v.length());
 		// Numerically, near 0 and PI are very bad condition for acos.
 		// In 3-space, |atan2(sin,cos)| is much stable.
@@ -72,33 +72,31 @@ public class PixToolsVector3d {
 	 * @param v1
 	 *            the other vector
 	 */
-	public final double dot(PixToolsVector3d v1) {
+	public final double dot(Vector3d v1) {
 		return x * v1.x + y * v1.y + z * v1.z;
 	}
 
 	/**
 	 * Return normalized vector of this vector
 	 */
-	public final PixToolsVector3d normalized() {
+	public final Vector3d normalized() {
 		double d = length();
 		// zero-div may occur.
-		return new PixToolsVector3d(x / d, y / d, z / d);
+		return new Vector3d(x / d, y / d, z / d);
 	}
 
 	/**
-	 * calculate cross product of two vectors
+	 * calculate cross product of this and second vector
 	 * 
-	 * @param v1
-	 *            PixToolsVector3d
-	 * @param v2
-	 *            PixToolsVector3d
+	 * @param v2 second vector
+	 *
 	 * @return PixToolsVector3d result of the product
 	 */
-	public PixToolsVector3d crossProduct(PixToolsVector3d v2) {
+	public Vector3d cross(Vector3d v2) {
 		double x = this.y * v2.z - this.z * v2.y;
 		double y = this.z * v2.x - this.x * v2.z;
 		double z = this.x * v2.y - this.y * v2.x;
-		return new PixToolsVector3d(x, y, z);
+		return new Vector3d(x, y, z);
 	}
 
 	/** 
@@ -129,9 +127,9 @@ public class PixToolsVector3d {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof PixToolsVector3d))
+		if (!(obj instanceof Vector3d))
 			return false;
-		PixToolsVector3d other = (PixToolsVector3d) obj;
+		Vector3d other = (Vector3d) obj;
 		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
 			return false;
 		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
@@ -161,10 +159,13 @@ public class PixToolsVector3d {
 	/** 
 	 * @return random normalized 3d vector
 	 */
-	public static PixToolsVector3d createRandomVector(){
-		return new PixToolsVector3d(
+	public static Vector3d createRandomVector(){
+		return new Vector3d(
 				Math.random()-0.5d,Math.random()-0.5d,Math.random()-0.5d)
 			.normalized();
 	}
-	
+
+    public double[] toArray() {
+        return new double[] {x,y,z};
+    }
 }

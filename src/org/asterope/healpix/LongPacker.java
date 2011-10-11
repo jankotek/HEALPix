@@ -69,7 +69,7 @@ final class LongPacker
      * </pre>
      */ 
 
-    static final public int packLong( DataOutput os, long v ) throws IOException {
+    static public int packLong( DataOutput os, long v ) throws IOException {
         /*
          * You can only pack non-negative long values with this method.
          */
@@ -148,7 +148,7 @@ final class LongPacker
      * @return The #of nibbles in [1:16].
      */
     
-    static final protected int getNibbleLength( long v )
+    static private int getNibbleLength( long v )
     {
         for( int i=56, j=16; i>=0; i-=8, j-=2 ) {
             if( (0xf0 & (v >> i)) != 0 ) return j;
@@ -168,7 +168,7 @@ final class LongPacker
      * @throws IOException
      */
     
-    static final public long unpackLong( DataInput is ) throws IOException
+    static public long unpackLong( DataInput is ) throws IOException
     {
         int b = is.readByte();
         int nbytes;
@@ -192,11 +192,11 @@ final class LongPacker
     }
 
     
-    static final public int packInt( DataOutput os, int v ) throws IOException {
+    static public int packInt( DataOutput os, int v ) throws IOException {
     	return packLong(os,v);
     }
     
-    static final public int unpackInt( DataInput is ) throws IOException{
+    static public int unpackInt( DataInput is ) throws IOException{
     	long val = unpackLong(is);
     	if(val>Integer.MAX_VALUE)
     		throw new InternalError("too big int: "+val);

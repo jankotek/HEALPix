@@ -32,7 +32,7 @@ public class Region {
 	private double phiMax;
 	private static final double epsilon = 1.0e-10;
 //	private boolean normalized = false;
-	private ArrayList<PixToolsVector3d> vertices;
+	private ArrayList<Vector3d> vertices;
 	private double PI = Math.PI;
 	/**
 	 * default constructor
@@ -62,15 +62,14 @@ public class Region {
 		this.tetMin = PI/2. - Math.toRadians(decMax);
 
 // create list of vertex vectors
-		vertices = new ArrayList<PixToolsVector3d>();
-		PixTools pt = new PixTools();
-		PixToolsVector3d vv = pt.Ang2Vec(tetMin,phiMin);
+		vertices = new ArrayList<Vector3d>();
+		Vector3d vv = PixTools.Ang2Vec(tetMin,phiMin);
 		vertices.add(vv);
-		vv = pt.Ang2Vec(tetMin,phiMax);
+		vv = PixTools.Ang2Vec(tetMin,phiMax);
 		vertices.add(vv);
-		vv = pt.Ang2Vec(tetMax,phiMin);
+		vv = PixTools.Ang2Vec(tetMax,phiMin);
 		vertices.add(vv);
-		vv = pt.Ang2Vec(tetMax,phiMax);
+		vv = PixTools.Ang2Vec(tetMax,phiMax);
 		vertices.add(vv);		
 	    
 	}
@@ -110,7 +109,7 @@ public class Region {
 	/**
 	 * @return ArrayList of 3d vectors of vertices of the region
 	 */
-	public ArrayList<PixToolsVector3d> getVertices() {
+	public ArrayList<Vector3d> getVertices() {
 		return vertices;
 	}
 	
@@ -123,15 +122,15 @@ public class Region {
 	 */
 	public LongRangeSet pixelize(double precision){
 		LongRangeSetBuilder res = new LongRangeSetBuilder();
-		PixTools pt = new PixTools();
-		long nside = pt.GetNSide(precision);
-		long rnmin = pt.RingNum(nside,Math.cos(tetMin));
-		long rnmax = pt.RingNum(nside,Math.cos(tetMax));
+        long nside = PixTools.GetNSide(precision);
+		PixTools pt = new PixTools(nside);
+		long rnmin = pt.RingNum(Math.cos(tetMin));
+		long rnmax = pt.RingNum(Math.cos(tetMax));
 		for (long ir = rnmin; ir < rnmax; ir++) {
 			
 			double phi = (phiMin + phiMax)/2.;
 			double dphi = (phiMax - phiMin)/2.;
-			pt.InRing(nside, ir, phi, dphi,res);			
+			pt.InRing( ir, phi, dphi,res);
 		}
 
 		return res.build();

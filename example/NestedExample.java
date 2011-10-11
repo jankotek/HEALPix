@@ -14,7 +14,7 @@ public class NestedExample {
 		 */
 		PixToolsNested t = new PixToolsNested();
 		
-		PixToolsVector3d northPole = t.Ang2Vec(0, 0);
+		Vector3d northPole = t.Ang2Vec(0, 0);
 		/*
 		 * all nested related methods have _nested suffix 
 		 */

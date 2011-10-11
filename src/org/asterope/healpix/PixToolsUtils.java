@@ -5,6 +5,7 @@
 
 package org.asterope.healpix;
 
+
 /** various utilities not directly related to Healpix.*/
 public class PixToolsUtils {
 	
@@ -17,14 +18,14 @@ public class PixToolsUtils {
 	 * x1 = tan((hp - side1)/2.) x2 = tan((hp - side2)/2.) x3 = tan((hp -
 	 * side3)/2.)
 	 * 
-	 * @param v1 PixToolsVector3d
-	 * @param v2 PixToolsVector3d
-	 * @param v3 PixToolsVector3d vertices of the triangle
+	 * @param v1 Vector3d
+	 * @param v2 Vector3d
+	 * @param v3 Vector3d vertices of the triangle
 	 * @return  double the triangle surface
 	 * @throws Exception
 	 *  
 	 */
-	public static double SurfaceTriangle(PixToolsVector3d v1, PixToolsVector3d v2, PixToolsVector3d v3)
+	public static double SurfaceTriangle(Vector3d v1, Vector3d v2, Vector3d v3)
 			throws Exception {
 		double res = 0.;
 		double side1 = v2.angle( v3) / 4.0;
@@ -76,30 +77,18 @@ public class PixToolsUtils {
     	return radec;
     }
     
-    /**
-     * returns polar coordinates of a point on unit sphere given Cartesian coordinates
-     * @param x - Cartesian coordinate x of a point on unit sphere
-     * @param y - y coordinate
-     * @param z - z coordinate
-     * @return double [] theta,phi
-     */
-    public static double[] xyzToPolar(double x, double y, double z) {
-    	double[] res;
-    	PixToolsVector3d vv = new PixToolsVector3d(x,y,z);
-    	res = Vect2Ang(vv);
-    	return res;
-    }
+
     
 	/**
-	 * converts a PixToolsVector3d in a tuple of angles tup[0] = theta 
+	 * converts a Vector3d in a tuple of angles tup[0] = theta 
 	 * co-latitude measured from North pole, in [0,PI] radians, tup[1] = phi 
 	 * longitude measured eastward, in [0,2PI] radians
 	 * 
 	 * @param v
-	 *            PixToolsVector3d
+	 *            Vector3d
 	 * @return double[] out_tup out_tup[0] = theta out_tup[1] = phi
 	 */
-	public static double[] Vect2Ang(PixToolsVector3d v) {
+	public static double[] Vect2Ang(Vector3d v) {
 		double[] out_tup = new double[2];
 		double norm = v.length();
 		double z = v.z / norm;

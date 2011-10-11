@@ -2,6 +2,9 @@ package org.asterope.healpix;
 
 import junit.framework.TestCase;
 
+import java.util.ArrayList;
+import java.util.TreeSet;
+
 public class LongRangeSetTest extends TestCase {
 
     LongRangeSetBuilder b = new LongRangeSetBuilder();
@@ -31,7 +34,12 @@ public class LongRangeSetTest extends TestCase {
         b.appendRange(30, 40);
 
         LongRangeSet rs2 = b.build();
-        LongSet rs = new LongSet(rs2.longIterator());
+
+        ArrayList<Long> rs = new ArrayList<Long>();
+        LongIterator iter = rs2.longIterator();
+        while (iter.hasNext()){
+            rs.add(iter.next());
+        }
 
         assert(!rs.contains(0));
         assert(rs.contains(1));

@@ -8,7 +8,6 @@ package org.asterope.healpix;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * Builder for LongRangeSet . LongRangeSet is unmodifiable, this class is 
@@ -17,8 +16,8 @@ import java.io.OutputStream;
  * To keep it fast and simple, this fab only supports appending. Uour ranges must be already 
  * sorted. This work  for most of Healpix based operations.
  * <p>
- * LongRangeSet can also be constructed using {@link LongSet}    
- * 
+ * LongRangeSet can also be constructed using {@link LongSet}
+ *
  */
 public class LongRangeSetBuilder {
 
@@ -26,26 +25,26 @@ public class LongRangeSetBuilder {
 	 * empty LongRangeSet
 	 */
 	public static final LongRangeSet EMPTY = new LongRangeSet(new long[0],0);
-	
+
 	/** sorted list of ranges.*/
     protected long[] ranges ;
     /** current position*/
     protected int pos = 0;
-    
+
     public LongRangeSetBuilder(){
     	this(32);
     }
 
     /**
      * construct new builder with given array size
-     * @param size 
+     * @param arraySize
      */
     public LongRangeSetBuilder(int arraySize) {
     	if(arraySize%2!=0) throw new IllegalArgumentException("not divide by 2");
-    	ranges = new long[arraySize]; 
+    	ranges = new long[arraySize];
 	}
 
-    /** make sure underling array have at least given size*/ 
+    /** make sure underling array have at least given size*/
 	public void ensureSize(int arraySize){
 		if(arraySize%2!=0) throw new IllegalArgumentException("not divide by 2");
         // grow the array if necessary.
@@ -57,7 +56,7 @@ public class LongRangeSetBuilder {
     }
 
 
-	/** append single long into builder 
+	/** append single long into builder
 	 * @param first - long to append
 	 */
     public void append(long first){
@@ -72,21 +71,20 @@ public class LongRangeSetBuilder {
     public void appendRange(long first, long last){
         if(first>last)
             throw new IllegalArgumentException("first > last");
-        if(pos>0){        
-        	if(first<lastFirst())
-        		throw new IllegalArgumentException("first already added, ranges must be added sorted! oldFirst:"+lastFirst()+", newFirst:"+first);
-        	if(first<last())
-        		first= last();
-        	if( last<last())
-        		throw new IllegalArgumentException("last already added, ranges must be added sorted! oldLast:"+last()+", newLast:"+last);
-            //special case, maybe just need to extend last bound
-            if(last() == first||last() +1 == first){
-            	ranges[pos-1] = last;
-            	return;
+        if(pos>0){
+            if(twoOrBigger() && first<=lastLast())
+                throw new IllegalArgumentException("Could not merge, ranges must be added sorted! lastLast:"+lastLast()+", newFirst:"+first);
+            //Check if new range overlaps with last one.
+            //In this case update last range, instead of adding new one
+            if(first <=last()+1){
+                ranges[pos-2] = Math.min(first,lastFirst());
+                ranges[pos-1] = Math.max(last,last());
+                return;
             }
         }
-            
-       
+
+
+
         //make sure there is space
         if(pos + 2>ranges.length)
             ensureSize(ranges.length * 2);
@@ -97,11 +95,23 @@ public class LongRangeSetBuilder {
         pos+=2;
     }
 
-	public long last() {
+	protected long last() {
 		return ranges[pos-1];
 	}
-	
-	public long lastFirst() {
+
+
+        protected boolean twoOrBigger() {
+            return pos > 3;
+        }
+
+        protected long lastLast() {
+            return ranges[pos-3];
+        }
+
+
+
+
+	protected long lastFirst() {
 		return ranges[pos-2];
 	}
 
@@ -114,13 +124,13 @@ public class LongRangeSetBuilder {
         while(iter.moveToNext())
             appendRange(iter.first(),iter.last());
     }
-    
+
     /**
      * append all ranges from given LongRangeSet
      * @param set LongRangeSet to append
      */
 	public void appendRangeSet(LongRangeSet set) {
-		appendRanges(set.rangeIterator());		
+		appendRanges(set.rangeIterator());
 	}
 
     /** @return number of added ranges so far*/
@@ -137,7 +147,7 @@ public class LongRangeSetBuilder {
     		return EMPTY;
         return new LongRangeSet(ranges,pos);
     }
-    
+
     /**
      * Write LongRangeSet into stream in an space efficient way.
      * Delta compression is used and Longs are stored in packed form. 
@@ -154,9 +164,9 @@ public class LongRangeSetBuilder {
     		LongPacker.packLong(out, diff);
     		last = i;
     	}
-    	
+
     }
-    
+
     /**
      * Read LongRangeSet from an input stream
      * @param in

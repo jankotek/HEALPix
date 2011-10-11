@@ -24,8 +24,8 @@ public class HighResolution {
 		/**
 		 * random points on equator which is worst case scenario (poles are best case)
 		 */		
-		PixToolsVector3d p1 =  t.Ang2Vec(Math.toRadians(90), Math.toRadians(30));
-		PixToolsVector3d p2 =  t.Ang2Vec(Math.toRadians(90), Math.toRadians(45));
+		Vector3d p1 =  t.Ang2Vec(Math.toRadians(90), Math.toRadians(30));
+		Vector3d p2 =  t.Ang2Vec(Math.toRadians(90), Math.toRadians(45));
 		
 		/**
 		 * create disc around given pixels

@@ -28,10 +28,10 @@ public class RegionTest extends TestCase {
 		y = 5.;
 		assertTrue(rg.inReg(x,y));
 		xMax = -10.;
-		ArrayList <PixToolsVector3d>vert = rg.getVertices();
+		ArrayList <Vector3d>vert = rg.getVertices();
 		double[][] vertPol = rg.getPolReg();
 		for ( int ind=0; ind<vert.size(); ind++) {
-			PixToolsVector3d vv =  vert.get(ind);
+			Vector3d vv =  vert.get(ind);
 			double [] vvAng = PixToolsUtils.Vect2Ang(vv);
 			if (vertPol[ind][1] < 0) vertPol[ind][1] += TWOPI;
 //			double comp = BitManipulation.MODULO(vvAng[1], TWOPI) - epsilon;
@@ -57,7 +57,7 @@ public class RegionTest extends TestCase {
 		double xMax = 60.;
 		double yMin = -20.0;
 		double yMax = 0.;
-		PixTools pt = new PixTools();
+
 		Region rg = new Region(xMin,xMax,yMin,yMax);
 		double[][] regCoord = rg.getPolReg();
 		for (int i = 0; i<regCoord.length; i++ ) {
@@ -67,23 +67,24 @@ public class RegionTest extends TestCase {
 		
 		try {
 			pixels = new LongList(rg.pixelize(resolution));
-			long nside = pt.GetNSide(resolution);
+			long nside = PixTools.GetNSide(resolution);
+            PixTools pt = new PixTools(nside);
 			int npix = pixels.size();
 			assertFalse(npix == 0);
 			System.out.println("npix="+npix);
 			for (int i=0; i<npix; i++) {
 				long pix = ((Long) pixels.get(i)).longValue();
 				System.out.println("pixel="+pix);
-				double[] pixpos = pt.pix2ang_ring(nside,pix);
+				double[] pixpos = pt.pix2ang(pix);
 				System.out.println("theta="+pixpos[0]+" phi="+pixpos[1]);
 
-				double[][] pixvert = pt.pix2vertex_ring(nside,pix);
+				double[][] pixvert = pt.pix2vertex(pix);
 				System.out.println("corners");
 				for (int j=0; j<pixvert[0].length; j++) {
 					double x = pixvert[0][j];
 					double y = pixvert[1][j];
 					double z = pixvert[2][j];
-					double[] pol = PixToolsUtils.xyzToPolar(x,y,z);
+					double[] pol = new Vector3d(x,y,z).toArray();
 					double[] radec1 = PixToolsUtils.PolarToRaDec(pol);
 					System.out.println("ra= "+radec1[0]+" dec="+radec1[1]);
 				}

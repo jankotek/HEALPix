@@ -24,7 +24,7 @@ public class Performance {
 	
 	static StopWatch sw = new StopWatch();
 	static PixTools t = new PixTools();
-	static PixToolsVector3d centre = new PixToolsVector3d(1,1,1).normalized();
+	static Vector3d centre = new Vector3d(1,1,1).normalized();
 	static long nside = 0;
 	static double radius = 0;
 	static LongRangeSet result = null;

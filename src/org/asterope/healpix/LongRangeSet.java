@@ -23,7 +23,7 @@ import java.util.NoSuchElementException;
  * Is readonly, so is thread safe.
  * <p> 
  * To construct new LongRangeSet use {@link LongRangeSetBuilder} if 
- * our values are sorted. Or use {@link LongSet} if our values are unsorted.  
+ * our values are sorted.
  * <p>
  * Inspired by Justin F. Chapweske and Soren Bak
  * @author Jan Kotek
@@ -34,7 +34,23 @@ public class LongRangeSet implements Externalizable, Iterable<Long>{
 
     /** sorted ranges, even is first, odd is last */
     protected long[] ranges;
-    
+
+    private static final LongRangeIterator EMPTY_ITERATOR = new LongRangeIterator(){
+
+			public long first() {
+				throw new NoSuchElementException();
+			}
+
+			public long last() {
+				throw new NoSuchElementException();
+			}
+
+			public boolean moveToNext() {
+				return false;
+			}
+
+    };
+
     /** empty constructor for serialization*/
     public LongRangeSet() {
     
@@ -126,21 +142,8 @@ public class LongRangeSet implements Externalizable, Iterable<Long>{
      * @return LongRangeIterator over ranges in this set
      */
     public LongRangeIterator rangeIterator(){
-    	if(isEmpty()) return new LongRangeIterator(){
-
-			public long first() {
-				throw new NoSuchElementException();
-			}
-
-			public long last() {
-				throw new NoSuchElementException();			
-			}
-
-			public boolean moveToNext() {			
-				return false;
-			}
-
-};    	
+    	if(isEmpty())
+                return EMPTY_ITERATOR;
     	
         return new LongRangeIterator(){
 
@@ -174,7 +177,7 @@ public class LongRangeSet implements Externalizable, Iterable<Long>{
      public Iterator<Long> iterator() {
         return new Iterator<Long>(){
             
-            LongIterator iter =longIterator();
+            final LongIterator iter =longIterator();
 
             public boolean hasNext() {
                 return iter.hasNext();
@@ -248,13 +251,11 @@ public class LongRangeSet implements Externalizable, Iterable<Long>{
 
     	
     	//System.out.println(firstIndex + " - "+lastIndex);
-    	
-    	
-    	if(firstIndex <0 && lastIndex<0 && firstIndex%2==-1 && firstIndex == lastIndex)
-    		return false;
 
 
-    	return true;
+        return !(firstIndex < 0 && lastIndex < 0 && firstIndex % 2 == -1 && firstIndex == lastIndex);
+
+
     }
     
 
@@ -287,15 +288,6 @@ public class LongRangeSet implements Externalizable, Iterable<Long>{
     	return false;
     }
 
-    /** 
-     * Converts to LongSet which can be modified 
-     * @return LongSet 
-     */
-    public LongSet toLongSet() {
-        LongSet ret = new LongSet();
-        ret.addAll(longIterator());
-        return ret;
-    }
 
     /** 
      * @return number of longs (pixels) in this set. !!NOT number of ranges!!
@@ -314,6 +306,15 @@ public class LongRangeSet implements Externalizable, Iterable<Long>{
      */
     public int rangeCount(){
     	return ranges.length/2;    	
+    }
+
+
+    public long rangeFirst(int i){
+        return ranges[i*2];
+    }
+
+    public long rangeLast(int i){
+        return ranges[i*2+1];
     }
 
 
@@ -361,10 +362,8 @@ public class LongRangeSet implements Externalizable, Iterable<Long>{
 		if (!(obj instanceof LongRangeSet))
 			return false;
 		LongRangeSet other = (LongRangeSet) obj;
-		if (!Arrays.equals(ranges, other.ranges))
-			return false;
-		return true;
-	}
+            return Arrays.equals(ranges, other.ranges);
+        }
 
 	/**
 	 * Create new LongRangeSet with complement (inversion) of values in this set. 
@@ -429,7 +428,7 @@ public class LongRangeSet implements Externalizable, Iterable<Long>{
         		//scroll first iterator until it overlaps    			
     			rsb.appendRange(it1.first(), it1.last());
     			run1 = it1.moveToNext();
-    		}else if(run2 && (!run1 || it2.last()<it1.first())) {    		
+    		}else if(run2 && (!run1 || it2.last()<it1.first())) {
     			//	scroll second iterator until it overlaps    		    				
     			rsb.appendRange(it2.first(), it2.last());
     			run2 = it2.moveToNext();

@@ -25,5 +25,28 @@ public class LongRangeSetBuilderTest extends TestCase{
 		assertTrue(!iter.moveToNext());
 	}
 
+  public void testMoveFirst(){
+    LongRangeSetBuilder b = new LongRangeSetBuilder();
+
+    b.appendRange(1,5);
+    b.appendRange(10,12);
+    b.appendRange(8,16); //builder should extend last range, instead of adding new one
+
+    LongRangeIterator i = b.build().rangeIterator();
+    assertTrue(i.moveToNext());
+    assertEquals(1, i.first() );
+    assertEquals(5, i.last());
+    assertTrue(i.moveToNext());
+    assertEquals(8, i.first());
+    assertEquals(16, i.last());
+    assertTrue(!i.moveToNext());
+
+    try{
+      //overlap with first range, should throw an exception
+      b.appendRange(4,16);
+      fail();
+    }catch(Exception e){}
+  }
+
 }
 
