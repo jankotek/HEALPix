@@ -281,7 +281,7 @@ public class PixTools {
         final double determ = vt.dot(vv[2]);
 
         if (Math.abs(determ) < 1.0e-20) {
-            throw new HealpixException("QueryTriangle: the triangle is degenerated - query cannot be performed");
+            throw new IllegalArgumentException("QueryTriangle: the triangle is degenerated - query cannot be performed");
         }
         // The sign of determinant
         final double sdet = determ >= 0. ? 1.0 : -1.0;
@@ -462,7 +462,7 @@ public class PixTools {
                                 }
                             }
                             if (ndom > 3) {
-                                throw new HealpixException("QueryTriangle: too many intervals found");
+                                throw new InternalError("QueryTriangle: too many intervals found");
                             }
                         }
                     }
