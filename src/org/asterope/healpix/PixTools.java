@@ -53,7 +53,7 @@ public class PixTools {
 
     protected static final double HALFPI = PI / 2.0;
 
-    protected static final int ns_max = 1048576; // 2^20
+     static final int ns_max = 1048576; // 2^20
 
 
     /**
