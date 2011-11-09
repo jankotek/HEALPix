@@ -1,6 +1,9 @@
 package org.asterope.healpix;
 
 import junit.framework.TestCase;
+import org.apache.commons.math.geometry.Vector3D;
+
+import java.util.Vector;
 
 /**
  * Test which runs some 'brutal force' calculations to 
@@ -30,13 +33,13 @@ public class CalculTest extends TestCase{
 			double angle = nsideRes(nside)*2;
 			for(long n = 0;n<COUNT * 10; n++){
 				//convert random vector to IPIX
-				Vector3d v = new Vector3d(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalized();
+				Vector3D v = new Vector3D(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
 				long ipix = p.vect2pix( v);
 				//and convert IPIX back to vector
-				Vector3d v2 = p.pix2vect( ipix);
+				Vector3D v2 = p.pix2vect( ipix);
 				//make sure inversion is close enought
 				assertTrue( "Vector inversion failed. Nside:"+nside+", \nvector:"+v,
-						v2.angle(v) < angle); 
+                        Vector3D.angle(v2,v) < angle);
 				
 			}
 		}
@@ -52,7 +55,7 @@ public class CalculTest extends TestCase{
 			double angle = nsideRes(nside);
 			for(long n = 0;n<COUNT; n++){
 				//get random vector and ipix
-				Vector3d v = new Vector3d(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalized();
+				Vector3D v = new Vector3D(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
 				long ipix = p.vect2pix( v);
 				//query circle
 				LongRangeSet r1 = p.query_disc(v,angle,true);

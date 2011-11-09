@@ -7,6 +7,8 @@
 package org.asterope.healpix;
 
 
+import org.apache.commons.math.geometry.Vector3D;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -32,9 +34,9 @@ public class PixTools {
     }
 
     static final class Pixel{
-        final Vector3d centre;
+        final Vector3D centre;
         final double[][] borders;
-        public Pixel(Vector3d centre, double[][] borders) {
+        public Pixel(Vector3D centre, double[][] borders) {
             super();
             this.centre = centre;
             this.borders = borders;
@@ -126,12 +128,12 @@ public class PixTools {
      * @throws Exception
      * @throws IllegalArgumentException
      */
-    public LongRangeSet query_polygon(ArrayList<Vector3d> vlist,
+    public LongRangeSet query_polygon(ArrayList<Vector3D> vlist,
                                       boolean inclusive) throws Exception {
         LongRangeSet res = LongRangeSetBuilder.EMPTY;
         int nv = vlist.size();
-        Vector3d vp0, vp1, vp2;
-        Vector3d vo;
+        Vector3D vp0, vp1, vp2;
+        Vector3D vo;
 //		double surface, fsky;
         double hand;
         double[] ss = new double[nv];
@@ -163,8 +165,8 @@ public class PixTools {
                 vp1 =vlist.get(i1);
                 vp2 = vlist.get(i2);
                 // computes handedness (v0 x v2) . v1 for each vertex v1
-                vo = vp0.cross(vp2);
-                hand = vo.dot(vp1);
+                vo = Vector3D.crossProduct(vp0,vp2);
+                hand = Vector3D.dotProduct(vo,vp1);
                 if (hand >= 0.) {
                     ss[i1] = 1.0;
                 } else {
@@ -203,7 +205,7 @@ public class PixTools {
                     int n_rot = vlist.size() - ix;
                     int ilast = vlist.size() - 1;
                     for (int k = 0; k < n_rot; k++) {
-                        Vector3d temp = vlist.get(ilast);
+                        Vector3D temp = vlist.get(ilast);
                         vlist.remove(ilast);
                         vlist.add(0,  temp);
                     }
@@ -237,11 +239,11 @@ public class PixTools {
      * the three vertex vectors
      *
      * @param v1
-     *            Vector3d defines one vertex of the triangle
+     *            Vector3D defines one vertex of the triangle
      * @param v2
-     *            Vector3d another vertex
+     *            Vector3D another vertex
      * @param v3
-     *            Vector3d yet another one
+     *            Vector3D yet another one
      * @param do_inclusive
      *            long 0 (default) only pixels whose centers are inside the
      *            triangle will be listed, if set to 1 all pixels overlaping the
@@ -251,11 +253,11 @@ public class PixTools {
      * @throws IllegalArgumentException
      */
     public LongRangeSet query_triangle(
-            final Vector3d v1, final Vector3d v2,
-            final Vector3d v3,  final boolean  do_inclusive) throws Exception {
+            final Vector3D v1, final Vector3D v2,
+            final Vector3D v3,  final boolean  do_inclusive) throws Exception {
 
-        Vector3d[] vv = new Vector3d[3];
-        Vector3d[] vo = new Vector3d[3];
+        Vector3D[] vv = new Vector3D[3];
+        Vector3D[] vo = new Vector3D[3];
 
 
         final long npix = Nside2Npix(nside);
@@ -263,11 +265,11 @@ public class PixTools {
             throw new IllegalArgumentException(" Nside should be power of 2 >0 and < "+ns_max);
         }
         vv[0] = v1;
-        vv[0] = vv[0].normalized();
+        vv[0] = vv[0].normalize();
         vv[1] = v2;
-        vv[1] = vv[1].normalized();
+        vv[1] = vv[1].normalize();
         vv[2] = v3;
-        vv[2] = vv[2].normalized();
+        vv[2] = vv[2].normalize();
 
 
         final double dth1 = 1.0 / (3.0 * (nside * nside));
@@ -276,9 +278,9 @@ public class PixTools {
                   * determ = (v1 X v2) . v3 determines the left ( <0) or right (>0)
                   * handedness of the triangle
                   */
-        Vector3d vt = vv[0].cross(vv[1]);
+        Vector3D vt = Vector3D.crossProduct(vv[0],vv[1]);
 
-        final double determ = vt.dot(vv[2]);
+        final double determ = Vector3D.dotProduct(vt,vv[2]);
 
         if (Math.abs(determ) < 1.0e-20) {
             throw new IllegalArgumentException("QueryTriangle: the triangle is degenerated - query cannot be performed");
@@ -288,21 +290,21 @@ public class PixTools {
 
         /* vector orthogonal to the great circle containing the vertex doublet */
 
-        vo[0] = vv[1].cross(vv[2]);
-        vo[1] = vv[2].cross(vv[0]);
-        vo[2] = vv[0].cross(vv[1]);
-        vo[0] = vo[0].normalized();
-        vo[1] = vo[1].normalized();
-        vo[2] = vo[2].normalized();
+        vo[0] = Vector3D.crossProduct(vv[1],vv[2]);
+        vo[1] = Vector3D.crossProduct(vv[2],vv[0]);
+        vo[2] = Vector3D.crossProduct(vv[0],vv[1]);
+        vo[0] = vo[0].normalize();
+        vo[1] = vo[1].normalize();
+        vo[2] = vo[2].normalize();
 
         /* test presence of poles in the triangle */
         double zmax = -1.0;
         double zmin = 1.0;
-        final boolean test1 = (vo[0].z * sdet >= 0.0); // north pole in hemisphere defined by
+        final boolean test1 = (vo[0].getZ() * sdet >= 0.0); // north pole in hemisphere defined by
         // 2-3
-        final boolean test2 = (vo[1].z * sdet >= 0.0); // north pole in the hemisphere defined
+        final boolean test2 = (vo[1].getZ() * sdet >= 0.0); // north pole in the hemisphere defined
         // by 1-2
-        final boolean test3 = (vo[2].z * sdet >= 0.0); // north pole in hemisphere defined by
+        final boolean test3 = (vo[2].getZ() * sdet >= 0.0); // north pole in hemisphere defined by
         // 1-3
         if (test1 && test2 && test3)
             zmax = 1.0; // north pole in the triangle
@@ -314,15 +316,15 @@ public class PixTools {
         /* sin of theta for orthogonal vector */
         double[] sto = new double[3];
         for (int i = 0; i < 3; i++) {
-            sto[i] = Math.sqrt((1.0 - vo[i].z) * (1.0 + vo[i].z));
+            sto[i] = Math.sqrt((1.0 - vo[i].getZ()) * (1.0 + vo[i].getZ()));
         }
         /*
                   * for each segment ( side of the triangle ) the extrema are either -
                   * -the 2 vertices - one of the vertices and a point within the segment
                   */
 
-        zmax = Math.max(Math.max(vv[0].z, vv[1].z), Math.max(vv[2].z, zmax));
-        zmin = Math.min(Math.min(vv[0].z, vv[1].z), Math.min(vv[2].z, zmin));
+        zmax = Math.max(Math.max(vv[0].getZ(), vv[1].getZ()), Math.max(vv[2].getZ(), zmax));
+        zmin = Math.min(Math.min(vv[0].getZ(), vv[1].getZ()), Math.min(vv[2].getZ(), zmin));
         /*
                   * if we are inclusive, move upper point up, and lower point down, by a
                   * half pixel size
@@ -345,20 +347,20 @@ public class PixTools {
         double[] phi0i = new double[3];
         double[] tgthi = new double[3];
         for (int i = 0; i < 3; i++) {
-            tgthi[i] = -1.0e30 * vo[i].z;
+            tgthi[i] = -1.0e30 * vo[i].getZ();
             phi0i[i] = 0.0;
         }
         for (int j = 0; j < 3; j++) {
             if (sto[j] > 1.0e-10) {
-                tgthi[j] = -vo[j].z / sto[j]; // - cotan(theta_orth)
+                tgthi[j] = -vo[j].getZ() / sto[j]; // - cotan(theta_orth)
 
-                phi0i[j] = Math.atan2(vo[j].y, vo[j].x); // Should make it 0-2pi
+                phi0i[j] = Math.atan2(vo[j].getY(), vo[j].getX()); // Should make it 0-2pi
                 // ?
                 /* Bring the phi0i to the [0,2pi] domain if need */
 
                 if (phi0i[j] < 0.) {
                     phi0i[j] = BitManipulation.MODULO(
-                            (Math.atan2(vo[j].y, vo[j].x) + TWOPI), TWOPI); //  [0-2pi]
+                            (Math.atan2(vo[j].getY(), vo[j].getX()) + TWOPI), TWOPI); //  [0-2pi]
                 }
 
             }
@@ -497,7 +499,7 @@ public class PixTools {
      * angular distance Radius of the center.
      *
      * @param vector
-     *            Vector3d pointing to the disc center
+     *            Vector3D pointing to the disc center
      * @param radius
      *            double angular radius of the disc (in RADIAN )
      * @param inclusive
@@ -512,7 +514,7 @@ public class PixTools {
      *
      * calls: RingNum(nside, ir) InRing(nside, iz, phi0, dphi,nest) vector2pix(nside,ipix)
      */
-    public LongRangeSet query_disc(Vector3d vector, double radius,
+    public LongRangeSet query_disc(Vector3D vector, double radius,
                                    boolean inclusive)  {
         LongRangeSetBuilder res = new LongRangeSetBuilder();
 
@@ -532,10 +534,10 @@ public class PixTools {
             radius_eff += PI / (4.0 * nside); // increase radius by half pixel
         double cosang = Math.cos(radius_eff);
         /* disc center */
-        vector = vector.normalized();
-        double x0 = vector.x; // norm_vect0;
-        double y0 = vector.y; // norm_vect0;
-        double z0 = vector.z; // norm_vect0;
+        vector = vector.normalize();
+        double x0 = vector.getX(); // norm_vect0;
+        double y0 = vector.getY(); // norm_vect0;
+        double z0 = vector.getZ(); // norm_vect0;
 //		System.out.println("x0="+x0+" y0="+y0+" z0="+z0);
         double phi0 = 0.0;
         double dphi = 0.0;
@@ -699,9 +701,9 @@ public class PixTools {
      * is calculated by makePix2Vect method
      *
      * @param ipix pixel number
-     * @return Vector3d
+     * @return Vector3D
      */
-    public Vector3d pix2vect(long ipix)  {
+    public Vector3D pix2vect(long ipix)  {
         return makePix2Vect(ipix).centre;
     }
 
@@ -817,10 +819,10 @@ public class PixTools {
         }
         /* pixel center */
         double sth = Math.sqrt((1.0 - z) * (1.0 + z));
-        //pixVect.x = sth * Math.cos(phi);
-        //pixVect.y = sth * Math.sin(phi);
-        //pixVect.z = z;
-        Vector3d pixVect = new Vector3d(sth * Math.cos(phi), sth * Math.sin(phi), z);
+        //pixVect.getX() = sth * Math.cos(phi);
+        //pixVect.getY() = sth * Math.sin(phi);
+        //pixVect.getZ() = z;
+        Vector3D pixVect = new Vector3D(sth * Math.cos(phi), sth * Math.sin(phi), z);
         /* west vertex */
         double phi_wv = phi - hdelta_phi;
         double pixVertex[][] = new double[3][4];
@@ -883,19 +885,19 @@ public class PixTools {
      * parameter nside
      *
      * @param vector
-     *            Vector3d of the point coordinates
+     *            Vector3D of the point coordinates
      * @return  long pixel number
      * @throws IllegalArgumentException
      */
-    public long vect2pix(Vector3d vector)  {
+    public long vect2pix(Vector3D vector)  {
         if (nside < 1 || nside > ns_max) {
             throw new IllegalArgumentException("Nside should be power of 2 >0 and < "+ns_max);
         }
-        double dnorm = vector.length();
-        double z = vector.z / dnorm;
+        double dnorm = vector.getNorm();
+        double z = vector.getZ() / dnorm;
         double phi = 0.;
-        if (vector.x != 0. || vector.y != 0.)
-            phi = Math.atan2(vector.y, vector.x); // phi in [-pi,pi]
+        if (vector.getX() != 0. || vector.getY() != 0.)
+            phi = Math.atan2(vector.getY(), vector.getX()); // phi in [-pi,pi]
 
         if (phi < 0.)
             phi += TWOPI; //  phi in [0, 2pi]
@@ -1117,12 +1119,12 @@ public class PixTools {
      *
      * @param theta double
      * @param phi double
-     * @return Vector3d
+     * @return Vector3D
      * @throws IllegalArgumentException
      */
-    public static Vector3d Ang2Vec(double theta, double phi)  {
+    public static Vector3D Ang2Vec(double theta, double phi)  {
 
-        Vector3d v;
+        Vector3D v;
         if ((theta < 0.0) || (theta > PI)) {
             throw new IllegalArgumentException("theta out of range [0.,PI]");
         }
@@ -1130,7 +1132,7 @@ public class PixTools {
         double x = stheta * Math.cos(phi);
         double y = stheta * Math.sin(phi);
         double z = Math.cos(theta);
-        v = new Vector3d(x, y, z);
+        v = new Vector3D(x, y, z);
         return v;
     }
 

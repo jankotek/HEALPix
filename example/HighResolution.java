@@ -1,6 +1,6 @@
 import org.asterope.healpix.LongRangeSet;
 import org.asterope.healpix.PixTools;
-import org.asterope.healpix.Vector3d;
+import org.asterope.healpix.Vector3D;
 
 
 /** 
@@ -26,8 +26,8 @@ public class HighResolution {
 		/**
 		 * random points on equator which is worst case scenario (poles are best case)
 		 */		
-		Vector3d p1 =  t.Ang2Vec(Math.toRadians(90), Math.toRadians(30));
-		Vector3d p2 =  t.Ang2Vec(Math.toRadians(90), Math.toRadians(45));
+		Vector3D p1 =  t.Ang2Vec(Math.toRadians(90), Math.toRadians(30));
+		Vector3D p2 =  t.Ang2Vec(Math.toRadians(90), Math.toRadians(45));
 		
 		/**
 		 * create disc around given pixels

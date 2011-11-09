@@ -6,6 +6,8 @@
 package org.asterope.healpix;
 
 
+import org.apache.commons.math.geometry.Vector3D;
+
 /** various utilities not directly related to Healpix.*/
 public class PixToolsUtils {
 	
@@ -18,19 +20,19 @@ public class PixToolsUtils {
 	 * x1 = tan((hp - side1)/2.) x2 = tan((hp - side2)/2.) x3 = tan((hp -
 	 * side3)/2.)
 	 * 
-	 * @param v1 Vector3d
-	 * @param v2 Vector3d
-	 * @param v3 Vector3d vertices of the triangle
+	 * @param v1 Vector3D
+	 * @param v2 Vector3D
+	 * @param v3 Vector3D vertices of the triangle
 	 * @return  double the triangle surface
 	 * @throws Exception
 	 *  
 	 */
-	public static double SurfaceTriangle(Vector3d v1, Vector3d v2, Vector3d v3)
+	public static double SurfaceTriangle(Vector3D v1, Vector3D v2, Vector3D v3)
 			throws Exception {
 		double res = 0.;
-		double side1 = v2.angle( v3) / 4.0;
-		double side2 = v3.angle(v1) / 4.0;
-		double side3 = v1.angle(v2) / 4.0;
+		double side1 = Vector3D.angle(v2, v3) / 4.0;
+		double side2 = Vector3D.angle(v3, v1) / 4.0;
+		double side3 = Vector3D.angle(v1, v2) / 4.0;
 		double x0 = Math.tan(side1 + side2 + side3);
 		double x1 = Math.tan(side2 + side3 - side1);
 		double x2 = Math.tan(side1 + side3 - side2);
@@ -80,22 +82,22 @@ public class PixToolsUtils {
 
     
 	/**
-	 * converts a Vector3d in a tuple of angles tup[0] = theta 
+	 * converts a Vector3D in a tuple of angles tup[0] = theta
 	 * co-latitude measured from North pole, in [0,PI] radians, tup[1] = phi 
 	 * longitude measured eastward, in [0,2PI] radians
 	 * 
 	 * @param v
-	 *            Vector3d
+	 *            Vector3D
 	 * @return double[] out_tup out_tup[0] = theta out_tup[1] = phi
 	 */
-	public static double[] Vect2Ang(Vector3d v) {
+	public static double[] Vect2Ang(Vector3D v) {
 		double[] out_tup = new double[2];
-		double norm = v.length();
-		double z = v.z / norm;
+		double norm = v.getNorm();
+		double z = v.getZ() / norm;
 		double theta = Math.acos(z);
 		double phi = 0.;
-		if ((v.x != 0.) || (v.y != 0)) {
-			phi = Math.atan2(v.y, v.x); // phi in [-pi,pi]
+		if ((v.getX() != 0.) || (v.getY() != 0)) {
+			phi = Math.atan2(v.getY(), v.getX()); // phi in [-pi,pi]
 		}
 		if (phi < 0)
 			phi += 2.0 * Math.PI; // phi in [0, 2pi]

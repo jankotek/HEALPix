@@ -3,6 +3,7 @@ package org.asterope.healpix;
 import junit.framework.TestCase;
 
 import java.util.TreeSet;
+import org.apache.commons.math.geometry.*;
 
 
 public class QueryDiscTest extends TestCase {
@@ -20,11 +21,11 @@ public class QueryDiscTest extends TestCase {
     System.out.println("pixSize="+pixSize+" rad");
 
     
-    LongList fullSky = new LongList(pt.query_disc( new Vector3d(0., 0., 1.), radius,  inclusive));
-    LongList firstHalfSky = new LongList(pt.query_disc( new Vector3d(0., 0., 1.), radius1,  inclusive));
-    LongList secondHalfSky = new LongList(pt.query_disc( new Vector3d(0., 0., -1.), radius1,  inclusive));
+    LongList fullSky = new LongList(pt.query_disc( new Vector3D(0., 0., 1.), radius,  inclusive));
+    LongList firstHalfSky = new LongList(pt.query_disc( new Vector3D(0., 0., 1.), radius1,  inclusive));
+    LongList secondHalfSky = new LongList(pt.query_disc( new Vector3D(0., 0., -1.), radius1,  inclusive));
     firstHalfSky.addAll(secondHalfSky);
-    TreeSet pixHalfsUnique = firstHalfSky.toTreeSet();
+    TreeSet<Long> pixHalfsUnique = firstHalfSky.toTreeSet();
     LongList pixHalfsList = new LongList(pixHalfsUnique);
     pixHalfsList = pixHalfsList.sort();
     fullSky = fullSky.sort();
@@ -39,8 +40,8 @@ public class QueryDiscTest extends TestCase {
     
 
 
-   firstHalfSky = new LongList(pt.query_disc( new Vector3d(1., 0., 0.), radius1, inclusive));
-   secondHalfSky = new LongList(pt.query_disc( new Vector3d(-1., 0., 0.),radius1,  inclusive));
+   firstHalfSky = new LongList(pt.query_disc( new Vector3D(1., 0., 0.), radius1, inclusive));
+   secondHalfSky = new LongList(pt.query_disc( new Vector3D(-1., 0., 0.),radius1,  inclusive));
     firstHalfSky.addAll(secondHalfSky);
     pixHalfsUnique = firstHalfSky.toTreeSet();
     pixHalfsList = new LongList(pixHalfsUnique);
@@ -56,8 +57,8 @@ public class QueryDiscTest extends TestCase {
         }
 
 
-    firstHalfSky = new LongList(pt.query_disc( new Vector3d(0., 1., 0.), radius1,  inclusive));
-    secondHalfSky = new LongList(pt.query_disc( new Vector3d(0., -1., 0.), radius1,  inclusive));
+    firstHalfSky = new LongList(pt.query_disc( new Vector3D(0., 1., 0.), radius1,  inclusive));
+    secondHalfSky = new LongList(pt.query_disc( new Vector3D(0., -1., 0.), radius1,  inclusive));
     firstHalfSky.addAll(secondHalfSky);
     pixHalfsUnique = firstHalfSky.toTreeSet();
     pixHalfsList = new LongList(pixHalfsUnique);

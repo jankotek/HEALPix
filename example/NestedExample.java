@@ -1,6 +1,6 @@
 import org.asterope.healpix.LongRangeSet;
 import org.asterope.healpix.PixToolsNested;
-import org.asterope.healpix.Vector3d;
+import org.asterope.healpix.Vector3D;
 
 
 /** 
@@ -16,7 +16,7 @@ public class NestedExample {
 		 */
 		PixToolsNested t = new PixToolsNested();
 		
-		Vector3d northPole = t.Ang2Vec(0, 0);
+		Vector3D northPole = t.Ang2Vec(0, 0);
 		/*
 		 * all nested related methods have _nested suffix 
 		 */

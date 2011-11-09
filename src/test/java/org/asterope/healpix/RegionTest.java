@@ -1,6 +1,7 @@
 package org.asterope.healpix;
 
 import junit.framework.TestCase;
+import org.apache.commons.math.geometry.Vector3D;
 
 import java.util.ArrayList;
 
@@ -28,10 +29,10 @@ public class RegionTest extends TestCase {
 		y = 5.;
 		assertTrue(rg.inReg(x,y));
 		xMax = -10.;
-		ArrayList <Vector3d>vert = rg.getVertices();
+		ArrayList <Vector3D>vert = rg.getVertices();
 		double[][] vertPol = rg.getPolReg();
 		for ( int ind=0; ind<vert.size(); ind++) {
-			Vector3d vv =  vert.get(ind);
+			Vector3D vv =  vert.get(ind);
 			double [] vvAng = PixToolsUtils.Vect2Ang(vv);
 			if (vertPol[ind][1] < 0) vertPol[ind][1] += TWOPI;
 //			double comp = BitManipulation.MODULO(vvAng[1], TWOPI) - epsilon;
@@ -84,7 +85,7 @@ public class RegionTest extends TestCase {
 					double x = pixvert[0][j];
 					double y = pixvert[1][j];
 					double z = pixvert[2][j];
-					double[] pol = new Vector3d(x,y,z).toArray();
+					double[] pol = new double[]{x,y,z};
 					double[] radec1 = PixToolsUtils.PolarToRaDec(pol);
 					System.out.println("ra= "+radec1[0]+" dec="+radec1[1]);
 				}

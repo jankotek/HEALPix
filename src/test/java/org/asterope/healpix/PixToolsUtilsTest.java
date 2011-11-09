@@ -1,6 +1,7 @@
 package org.asterope.healpix;
 
 import junit.framework.TestCase;
+import org.apache.commons.math.geometry.Vector3D;
 
 public class PixToolsUtilsTest extends TestCase {
 
@@ -8,9 +9,9 @@ public class PixToolsUtilsTest extends TestCase {
 	 * @throws Exception
 	 */
 	public void testSurfaceTriangle() throws Exception {
-		Vector3d v1 = new Vector3d(1.0, 0.0, 0.0);
-		Vector3d v2 = new Vector3d(0.0, 1.0, 0.0);
-		Vector3d v3 = new Vector3d(0.0, 0.0, 1.0);
+		Vector3D v1 = new Vector3D(1.0, 0.0, 0.0);
+		Vector3D v2 = new Vector3D(0.0, 1.0, 0.0);
+		Vector3D v3 = new Vector3D(0.0, 0.0, 1.0);
 		double res = PixToolsUtils.SurfaceTriangle(v1, v2, v3);
 		System.out.println("Triangle surface is=" + res / Math.PI
 				+ " steredians");

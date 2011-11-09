@@ -6,6 +6,7 @@
 package org.asterope.healpix;
 
 import junit.framework.TestCase;
+import org.apache.commons.math.geometry.Vector3D;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,14 +79,14 @@ public class PixToolsTest extends TestCase {
 	 */
 	public void testVec2Ang() {
 		double PI = Math.PI;
-		Vector3d v = new Vector3d(0.0, 1.0, 0.0);
+		Vector3D v = new Vector3D(0.0, 1.0, 0.0);
 		double[] ang_tup = { 0., 0. };
 		ang_tup = PixToolsUtils.Vect2Ang(v);
 		System.out.println(" Theta=" + ang_tup[0] / PI + " Phi=" + ang_tup[1]
 				/ PI);
 		assertEquals("Theta=" + ang_tup[0], 0.5, ang_tup[0] / PI, 1e-10);
 		assertEquals("Phi=" + ang_tup[1], 0.5, ang_tup[1] / PI, 1e-10);
-		v = new Vector3d(1.0, 0.0, 0.0);
+		v = new Vector3D(1.0, 0.0, 0.0);
 		ang_tup = PixToolsUtils.Vect2Ang(v);
 		assertEquals("phi=" + ang_tup[1], 0., ang_tup[1] / PI, 1e-10);
 		System.out.println(" test Vect2Ang is done");
@@ -109,7 +110,7 @@ public class PixToolsTest extends TestCase {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Vector3d v = PixTools.Ang2Vec(theta,phi);
+		Vector3D v = PixTools.Ang2Vec(theta,phi);
 		long pix1 =  pt.vect2pix( v);
 		assertEquals("pix=" + pix, pix1, pix, 1e-10);
 		assertEquals("pix=" + pix, 76, pix, 1e-10);
@@ -130,11 +131,11 @@ public class PixToolsTest extends TestCase {
 		double PI = Math.PI;
 		double theta = PI / 2.;
 		double phi = PI / 2;
-		Vector3d v = PixTools.Ang2Vec(theta, phi);
+		Vector3D v = PixTools.Ang2Vec(theta, phi);
 		System.out.println(v);
-		assertEquals("x=" + v.x, 0., v.x, 1e-10);
-		assertEquals("y=" + v.y, 1., v.y, 1e-10);
-		assertEquals("z=" + v.z, 0., v.z, 1e-10);
+		assertEquals("x=" + v.getX(), 0., v.getX(), 1e-10);
+		assertEquals("y=" + v.getY(), 1., v.getY(), 1e-10);
+		assertEquals("z=" + v.getZ(), 0., v.getZ(), 1e-10);
 		System.out.println(" test Ang2Vect is done");
 	}
 
@@ -162,73 +163,73 @@ public class PixToolsTest extends TestCase {
 		System.out.println(" test RingNum is done");
 		pt = new PixTools(4);
 		int pix = 3;
-		Vector3d v = pt.pix2vect(pix);
-		z = v.z;
+		Vector3D v = pt.pix2vect(pix);
+		z = v.getZ();
 		nring = (int) pt.RingNum(z);
 		assertEquals("z=" + z, 1, nring, 1e-10);
 		pix = 11;
 		v = pt.pix2vect(pix);
-		z = v.z;
+		z = v.getZ();
 		nring = (int) pt.RingNum( z);
 		assertEquals("z=" + z, 2, nring, 1e-10);
 		pix = 23;
 		v = pt.pix2vect(pix);
-		z = v.z;
+		z = v.getZ();
 		nring = (int) pt.RingNum( z);
 		assertEquals("z=" + z, 3, nring, 1e-10);
 		pix = 39;
 		v = pt.pix2vect(pix);
-		z = v.z;
+		z = v.getZ();
 		nring = (int) pt.RingNum( z);
 		assertEquals("z=" + z, 4, nring, 1e-10);
 		pix = 55;
 		v = pt.pix2vect( pix);
-		z = v.z;
+		z = v.getZ();
 		nring = (int) pt.RingNum( z);
 		assertEquals("z=" + z, 5, nring, 1e-10);
 		pix = 71;
 		v = pt.pix2vect( pix);
-		z = v.z;
+		z = v.getZ();
 		nring = (int) pt.RingNum( z);
 		assertEquals("z=" + z, 6, nring, 1e-10);
 		pix = 87;
 		v = pt.pix2vect( pix);
-		z = v.z;
+		z = v.getZ();
 		nring = (int) pt.RingNum( z);
 		assertEquals("z=" + z, 7, nring, 1e-10);
 		pix = 103;
 		v = pt.pix2vect(pix);
-		z = v.z;
+		z = v.getZ();
 		nring = (int) pt.RingNum( z);
 		assertEquals("z=" + z, 8, nring, 1e-10);
 		pix = 119;
 		v = pt.pix2vect( pix);
-		z = v.z;
+		z = v.getZ();
 		nring = (int) pt.RingNum( z);
 		assertEquals("z=" + z, 9, nring, 1e-10);
 		pix = 135;
 		v = pt.pix2vect( pix);
-		z = v.z;
+		z = v.getZ();
 		nring = (int) pt.RingNum( z);
 		assertEquals("z=" + z, 10, nring, 1e-10);
 		pix = 151;
 		v = pt.pix2vect( pix);
-		z = v.z;
+		z = v.getZ();
 		nring = (int) pt.RingNum( z);
 		assertEquals("z=" + z, 11, nring, 1e-10);
 		pix = 167;
 		v = pt.pix2vect( pix);
-		z = v.z;
+		z = v.getZ();
 		nring = (int) pt.RingNum( z);
 		assertEquals("z=" + z, 12, nring, 1e-10);
 		pix = 169;
 		v = pt.pix2vect( pix);
-		z = v.z;
+		z = v.getZ();
 		nring = (int) pt.RingNum( z);
 		assertEquals("z=" + z, 13, nring, 1e-10);
 		pix = 180;
 		v = pt.pix2vect( pix);
-		z = v.z;
+		z = v.getZ();
 		nring = (int) pt.RingNum( z);
 		assertEquals("z=" + z, 14, nring, 1e-10);
 		System.out.println("End test RingNum");
@@ -262,7 +263,7 @@ public class PixToolsTest extends TestCase {
 			assertEquals("ipnext = " + ring.get(i),
 					i + 12,  ring.get(i), 1e-10);
 		}
-		Vector3d v = new Vector3d(1., 0., 0.);
+		Vector3D v = new Vector3D(1., 0., 0.);
 		double[] ang_tup = { 0., 0. };
 		ang_tup = PixToolsUtils.Vect2Ang(v);
 		phi = ang_tup[1]/PI;
@@ -271,7 +272,7 @@ public class PixToolsTest extends TestCase {
 			assertEquals("ipnext = " +  ring.get(i),
 					i + 12,  ring.get(i), 1e-10);
 		}
-		Vector3d v1 = new Vector3d(-1., 0., 0.);
+		Vector3D v1 = new Vector3D(-1., 0., 0.);
 		
 		ang_tup = PixToolsUtils.Vect2Ang(v1);
 		phi = ang_tup[1]/PI;
@@ -335,26 +336,26 @@ public class PixToolsTest extends TestCase {
 		int nside = 2;
 		int ipix = 0;
 		PixTools pt = new PixTools(nside);
-		Vector3d v1 = new Vector3d(0., 0., 0.);
+		Vector3D v1 = new Vector3D(0., 0., 0.);
 		v1 = pt.pix2vect( ipix);
-		assertEquals("v1.z = " + v1.z, 1.0, v1.z, 1e-1);
+		assertEquals("v1.getZ() = " + v1.getZ(), 1.0, v1.getZ(), 1e-1);
 
 		ipix = 20;
-		Vector3d v2 = new Vector3d(0., 0., 0.);
+		Vector3D v2 = new Vector3D(0., 0., 0.);
 		v2 = pt.pix2vect( ipix);
-		assertEquals("v2.x = " + v2.x, 1.0, v2.x, 1e-1);
-		assertEquals("v2.z = " + v2.z, 0.0, v2.z, 1e-1);
+		assertEquals("v2.getX() = " + v2.getX(), 1.0, v2.getX(), 1e-1);
+		assertEquals("v2.getZ() = " + v2.getZ(), 0.0, v2.getZ(), 1e-1);
 		ipix = 22;
-		Vector3d v3 = pt.pix2vect( ipix);
-		assertEquals("v3.y = " + v3.y, 1.0, v3.y, 1e-1);
-		assertEquals("v3.z = " + v3.z, 0.0, v3.z, 1e-1);
-		//		System.out.println("Vector3 x="+v3.x+" y="+v3.y+" z="+v3.z);
+		Vector3D v3 = pt.pix2vect( ipix);
+		assertEquals("v3.getY() = " + v3.getY(), 1.0, v3.getY(), 1e-1);
+		assertEquals("v3.getZ() = " + v3.getZ(), 0.0, v3.getZ(), 1e-1);
+		//		System.out.println("Vector3 x="+v3.getX()+" y="+v3.getY()+" z="+v3.getZ());
 		ipix = 95;
 		nside = 4;
                 pt = new PixTools(nside);
 		v1 = pt.pix2vect( ipix);
-		v1 = v1.normalized();
-		double phi1 = Math.atan2(v1.y, v1.x);
+		v1 = v1.normalize();
+		double phi1 = Math.atan2(v1.getY(), v1.getX());
 		double[] tetphi = new double[2];
 		tetphi = pt.pix2ang( ipix);
 		assertEquals("phi = " + phi1, 0.0, Math.abs(phi1 - tetphi[1]), 1e-10);
@@ -362,8 +363,8 @@ public class PixToolsTest extends TestCase {
 		nside = 4;
                 pt = new PixTools(nside);
 		v1 = pt.pix2vect( ipix);
-		v1 = v1.normalized();
-		phi1 = Math.atan2(v1.y, v1.x);
+		v1 = v1.normalize();
+		phi1 = Math.atan2(v1.getY(), v1.getX());
 		if (phi1 < 0.)
 			phi1 += TWOPI;
 		tetphi = new double[2];
@@ -425,7 +426,7 @@ public class PixToolsTest extends TestCase {
 		
 		boolean inclusive = true;
 		double radius = Math.PI / 8.0;
-		Vector3d v = pt.pix2vect( 93);
+		Vector3D v = pt.pix2vect( 93);
 		LongList pixlist;
 		pixlist = new LongList(pt.query_disc(v, radius, inclusive));
 		System.out.println(pixlist);
@@ -462,11 +463,11 @@ public class PixToolsTest extends TestCase {
 		long pix2 = 57;
 		long pix3 = 140;
 		System.out.println("Start test Query Triangle !!!!!!!!!!!!!!!!!!!!");
-		Vector3d v11 = pt.pix2vect(pix1);
+		Vector3D v11 = pt.pix2vect(pix1);
 
-		Vector3d v22 = pt.pix2vect( pix2);
+		Vector3D v22 = pt.pix2vect( pix2);
 
-		Vector3d v33 = pt.pix2vect( pix3);
+		Vector3D v33 = pt.pix2vect( pix3);
 
 		//		System.out.println("nside="+nside+" triangle pixels "+pix1+" "+pix2+"
 		// "+pix3);
@@ -593,7 +594,7 @@ public class PixToolsTest extends TestCase {
 
 		System.out.println("Start test query_polygon !!!!!!!!!!!!!!!!!!!!!!");
 		ArrayList vlist = new ArrayList();
-		Vector3d v = pt.pix2vect( 53);
+		Vector3D v = pt.pix2vect( 53);
 		vlist.add( v);
 		v = pt.pix2vect( 51);
 		vlist.add( v);
@@ -715,14 +716,14 @@ public class PixToolsTest extends TestCase {
         PixTools pt = new PixTools(nside);
         System.out.println(" calculated nside="+nside);
         long cpix = pt.ang2pix( theta, phi);
-        Vector3d vc = pt.pix2vect( cpix);
+        Vector3D vc = pt.pix2vect( cpix);
         LongList pixlist = new LongList(pt.query_disc( vc, radius, inclusive));
 
         int nlist = pixlist.size();
         for (int i = 0; i < nlist; i++) {
             ipix =  pixlist.get(i);
-            Vector3d v = pt.pix2vect( ipix);
-            double dist = v.angle(vc);
+            Vector3D v = pt.pix2vect( ipix);
+            double dist = Vector3D.angle(v,vc);
             assertTrue(dist<=2.*radius);
         }
 
@@ -751,7 +752,7 @@ public class PixToolsTest extends TestCase {
 
 
      	double angle = Math.toRadians(0.011451621372724687);
-   	   	Vector3d v = new Vector3d(0.8956388362603873, -1.838600645782914E-4, 0.44478201534866);
+   	   	Vector3D v = new Vector3D(0.8956388362603873, -1.838600645782914E-4, 0.44478201534866);
     	
    	   	//convert vector to IPIX
     	long ipix = pt.vect2pix( v);

@@ -1,13 +1,14 @@
 package org.asterope.healpix;
 
 import junit.framework.TestCase;
+import org.apache.commons.math.geometry.Vector3D;
 
 //test PixTools on high resolution
 public class HiResTest extends TestCase{
 	final int NSIDE = 1048576; //highest res available with long ranges
 	final double D2R = Math.PI/180d;
 	final PixTools ps = new PixTools(NSIDE);
-	final Vector3d V = new Vector3d(1, 1, 1).normalized();
+	final Vector3D V = new Vector3D(1, 1, 1).normalize();
 
 	/**
 	 * test on high resolutions. If range set are working correctly, no OutOfMemory is generated

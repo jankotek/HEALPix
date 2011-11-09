@@ -7,6 +7,8 @@
 package org.asterope.healpix;
 
 
+import org.apache.commons.math.geometry.Vector3D;
+
 import java.util.ArrayList;
 
 
@@ -32,7 +34,7 @@ public class Region {
 	private double phiMax;
 	private static final double epsilon = 1.0e-10;
 //	private boolean normalized = false;
-	private ArrayList<Vector3d> vertices;
+	private ArrayList<Vector3D> vertices;
 	private double PI = Math.PI;
 	/**
 	 * default constructor
@@ -62,8 +64,8 @@ public class Region {
 		this.tetMin = PI/2. - Math.toRadians(decMax);
 
 // create list of vertex vectors
-		vertices = new ArrayList<Vector3d>();
-		Vector3d vv = PixTools.Ang2Vec(tetMin,phiMin);
+		vertices = new ArrayList<Vector3D>();
+		Vector3D vv = PixTools.Ang2Vec(tetMin,phiMin);
 		vertices.add(vv);
 		vv = PixTools.Ang2Vec(tetMin,phiMax);
 		vertices.add(vv);
@@ -109,7 +111,7 @@ public class Region {
 	/**
 	 * @return ArrayList of 3d vectors of vertices of the region
 	 */
-	public ArrayList<Vector3d> getVertices() {
+	public ArrayList<Vector3D> getVertices() {
 		return vertices;
 	}
 	

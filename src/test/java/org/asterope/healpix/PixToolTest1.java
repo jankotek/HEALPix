@@ -2,6 +2,7 @@ package org.asterope.healpix;
 
 
 import junit.framework.TestCase;
+import org.apache.commons.math.geometry.Vector3D;
 
 
 public class PixToolTest1 extends TestCase {
@@ -13,7 +14,7 @@ public class PixToolTest1 extends TestCase {
 	
 	public void testCircle1(){
                 PixTools tools = new PixTools(NSIDE1);
-		Vector3d vect = PixTools.Ang2Vec(0.5178634297507729, 0.06421357206295804);
+		Vector3D vect = PixTools.Ang2Vec(0.5178634297507729, 0.06421357206295804);
 		System.out.println(vect);
 		tools.query_disc( PixTools.Ang2Vec(0.5178634297507729, 0.06421357206295804), 5.817764173314432E-4,  true);
 	}
@@ -25,7 +26,7 @@ public class PixToolTest1 extends TestCase {
 	
 	public void testCircle3(){
                 PixTools tools = new PixTools(NSIDE1);
-		Vector3d vect = PixTools.Ang2Vec(0.011620983936195673, 0.44456444930382233);
+		Vector3D vect = PixTools.Ang2Vec(0.011620983936195673, 0.44456444930382233);
 		System.out.println(vect);
 		tools.query_disc( vect, 5.526875964648709E-4, true);
 	}
@@ -58,9 +59,9 @@ public class PixToolTest1 extends TestCase {
         long ipixR = tools.ang2pix( theta, phi);
         double[][] vertexesr = tools.pix2vertex( ipixR);
         for (int i=0; i< 4; i++) {
-            Vector3d vect = new Vector3d(vertexes[0][i],vertexes[1][i],vertexes[2][i]);
+            Vector3D vect = new Vector3D(vertexes[0][i],vertexes[1][i],vertexes[2][i]);
             double[] angs =PixToolsUtils.Vect2Ang(vect);
-            Vector3d vectR = new Vector3d(vertexesr[0][i],vertexesr[1][i],vertexesr[2][i]);
+            Vector3D vectR = new Vector3D(vertexesr[0][i],vertexesr[1][i],vertexesr[2][i]);
             double[] angsR =PixToolsUtils.Vect2Ang(vectR);
             assertEquals("theta="+angs[0],angs[0],angsR[0], 1e-10);
             assertEquals("phi="+angs[1],angs[1],angsR[1], 1e-10);
@@ -86,9 +87,9 @@ public class PixToolTest1 extends TestCase {
         long ipixR = tools.ang2pix( theta, phi);
         double[][] vertexesr = tools.pix2vertex( ipixR);
         for (int i=0; i< 4; i++) {
-            Vector3d vect = new Vector3d(vertexes[0][i],vertexes[1][i],vertexes[2][i]);
+            Vector3D vect = new Vector3D(vertexes[0][i],vertexes[1][i],vertexes[2][i]);
             double[] angs =PixToolsUtils.Vect2Ang(vect);
-            Vector3d vectR = new Vector3d(vertexesr[0][i],vertexesr[1][i],vertexesr[2][i]);
+            Vector3D vectR = new Vector3D(vertexesr[0][i],vertexesr[1][i],vertexesr[2][i]);
             double[] angsR =PixToolsUtils.Vect2Ang(vectR);
             assertEquals("theta="+angs[0],angs[0],angsR[0], 1e-10);
             assertEquals("phi="+angs[1],angs[1],angsR[1], 1e-10);
