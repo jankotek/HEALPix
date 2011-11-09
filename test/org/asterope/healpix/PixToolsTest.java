@@ -5,10 +5,10 @@
  */
 package org.asterope.healpix;
 
+import junit.framework.TestCase;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import junit.framework.TestCase;
 
 /**
  * test suit for PixTools

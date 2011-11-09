@@ -5,7 +5,6 @@
 
 package org.asterope.healpix;
 
-import sun.reflect.generics.tree.LongSignature;
 
 import java.io.Serializable;
 import java.util.Arrays;

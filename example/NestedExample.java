@@ -1,4 +1,6 @@
-import org.asterope.healpix.*;
+import org.asterope.healpix.LongRangeSet;
+import org.asterope.healpix.PixToolsNested;
+import org.asterope.healpix.Vector3d;
 
 
 /** 

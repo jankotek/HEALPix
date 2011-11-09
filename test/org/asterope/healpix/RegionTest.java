@@ -1,8 +1,8 @@
 package org.asterope.healpix;
 
-import java.util.ArrayList;
-
 import junit.framework.TestCase;
+
+import java.util.ArrayList;
 
 /**
  * @author kuropat

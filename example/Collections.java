@@ -1,4 +1,7 @@
-import org.asterope.healpix.*;
+import org.asterope.healpix.LongIterator;
+import org.asterope.healpix.LongList;
+import org.asterope.healpix.LongRangeSet;
+import org.asterope.healpix.Region;
 
 
 /**

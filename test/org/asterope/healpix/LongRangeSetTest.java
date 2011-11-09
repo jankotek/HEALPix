@@ -3,7 +3,6 @@ package org.asterope.healpix;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
-import java.util.TreeSet;
 
 public class LongRangeSetTest extends TestCase {
 
