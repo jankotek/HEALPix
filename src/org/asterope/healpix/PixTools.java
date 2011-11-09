@@ -868,49 +868,13 @@ public class PixTools {
         }
 
         double z = Math.cos(theta);
-        double zAbs = Math.abs(z);
 
         if (phi >= TWOPI)  phi = phi -TWOPI ;
 
         if (phi < 0.)
             phi =phi + TWOPI; //  phi in [0, 2pi]
-        double tt = phi / HALFPI; // in [0,4]
-//		tt = BitManipulation.MODULO(phi, TWOPI) / HALFPI; // in [0,4]
-        long nl2 = 2 * nside;
-        long nl4 = 4 * nside;
-        long ncap = nl2 * (nside - 1); // number of pixels in the north polar cap
-        long npix = 12 * nside * nside;
-        if (zAbs < twothird) { // equatorial region
-            long jp = (long) (nside * (0.5 + tt - 0.75 * z)); // index of ascending
-            // edge line
-            long jm = (long) (nside * (0.5 + tt + 0.75 * z)); // index of descending
-            // edge line
 
-            long ir = nside + 1 + jp - jm; // in [1,2n+1]
-            long kshift = 0;
-            if ( BitManipulation.MODULO(ir, 2) == 0)
-                kshift = 1; // 1 if ir even, 0 otherwise
-            long ip = ((jp + jm - nside + kshift + 1) / 2) + 1; // in [1,4n]
-            if (ip > nl4) ip = ip - nl4;
-            ipix1 = ncap + nl4 * (ir - 1) + ip;
-
-        } else { // North and South polar caps
-            double tp = tt - (long) tt;
-            double tmp = Math.sqrt(3.0 * (1.0 - zAbs));
-            long jp = (long) (nside * tp * tmp); // increasing edge line index
-            long jm = (long) (nside * (1.0 - tp) * tmp); // decreasing edge index
-
-            long ir = jp + jm + 1; // ring number counted from closest pole
-            long ip = (long) (tt * ir) + 1; // in [1,4*ir]
-            if (ip > 4 * ir)
-                ip = ip - 4 * ir;
-
-            ipix1 = 2 * ir * (ir - 1) + ip;
-            if (z <= 0.0)
-                ipix1 = npix - 2 * ir * (ir + 1) + ip;
-
-        }
-        return ipix1 - 1; // in [0, npix-1]
+        return zPhi2Pix(z, phi);
     }
 
     /**
@@ -924,9 +888,6 @@ public class PixTools {
      * @throws IllegalArgumentException
      */
     public long vect2pix(Vector3d vector)  {
-        long ipix1;
-
-
         if (nside < 1 || nside > ns_max) {
             throw new IllegalArgumentException("Nside should be power of 2 >0 and < "+ns_max);
         }
@@ -935,11 +896,16 @@ public class PixTools {
         double phi = 0.;
         if (vector.x != 0. || vector.y != 0.)
             phi = Math.atan2(vector.y, vector.x); // phi in [-pi,pi]
-        double za = Math.abs(z);
+
         if (phi < 0.)
             phi += TWOPI; //  phi in [0, 2pi]
-        double tt = phi / HALFPI; // in [0,4]
+        return zPhi2Pix(z, phi);
+    }
 
+    private long zPhi2Pix(double z, double phi) {
+        long ipix1;
+        double tt = phi / HALFPI; // in [0,4]
+        double za = Math.abs(z);
         long nl2 = 2 * nside;
         long nl4 = 4 * nside;
         long ncap = nl2 * (nside - 1); // number of pixels in the north polar cap
