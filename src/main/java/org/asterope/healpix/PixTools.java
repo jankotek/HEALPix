@@ -729,7 +729,7 @@ public class PixTools {
      *            pixel number
      * @return Pixel
      */
-    protected Pixel makePix2Vect(long ipix)  {
+    public Pixel makePix2Vect(long ipix)  {
 
         double z_nv, z_sv,  hdelta_phi;
         double   z,phi;
