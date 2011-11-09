@@ -79,12 +79,12 @@ public class RegionTest extends TestCase {
 				double[] pixpos = pt.pix2ang(pix);
 				System.out.println("theta="+pixpos[0]+" phi="+pixpos[1]);
 
-				double[][] pixvert = pt.pix2vertex(pix);
+				Vector3D[] pixvert = pt.makePix2Vect(pix).toVertex();
 				System.out.println("corners");
-				for (int j=0; j<pixvert[0].length; j++) {
-					double x = pixvert[0][j];
-					double y = pixvert[1][j];
-					double z = pixvert[2][j];
+				for (int j=0; j<pixvert.length; j++) {
+					double x = pixvert[j].getX();
+					double y = pixvert[j].getY();
+					double z = pixvert[j].getZ();
 					double[] pol = new double[]{x,y,z};
 					double[] radec1 = PixToolsUtils.PolarToRaDec(pol);
 					System.out.println("ra= "+radec1[0]+" dec="+radec1[1]);

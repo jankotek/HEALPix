@@ -33,13 +33,19 @@ public class PixTools {
         this.nside = nside;
     }
 
-    static final class Pixel{
-        final Vector3D centre;
-        final double[][] borders;
-        public Pixel(Vector3D centre, double[][] borders) {
-            super();
+    public static final class Pixel{
+        public final Vector3D centre,north,south,west,east;
+
+        public Pixel(Vector3D centre, Vector3D north, Vector3D south, Vector3D west, Vector3D east) {
             this.centre = centre;
-            this.borders = borders;
+            this.north = north;
+            this.south = south;
+            this.west = west;
+            this.east = east;
+        }
+
+        public Vector3D[] toVertex(){
+            return new Vector3D[]{west,east,north,south};
         }
 
 
@@ -707,16 +713,7 @@ public class PixTools {
         return makePix2Vect(ipix).centre;
     }
 
-    /**
-     * returns double [][] with coordinates of the pixel corners. The array is
-     * calculated by makePix2Vect method
-     *
-     * @param ipix pixel number
-     * @return  double[][] list of vertex coordinates
-     */
-    public double[][] pix2vertex(long ipix)  {
-        return makePix2Vect(ipix).borders;
-    }
+
 
     /**
      * renders vector (x,y,z) coordinates of the nominal pixel center for pixel
@@ -826,25 +823,18 @@ public class PixTools {
         /* west vertex */
         double phi_wv = phi - hdelta_phi;
         double pixVertex[][] = new double[3][4];
-        pixVertex[0][1] = sth * Math.cos(phi_wv);
-        pixVertex[1][1] = sth * Math.sin(phi_wv);
-        pixVertex[2][1] = z;
+        Vector3D west = new Vector3D(sth * Math.cos(phi_wv), sth * Math.sin(phi_wv),z);
+
         /* east vertex */
         double phi_ev = phi + hdelta_phi;
-        pixVertex[0][3] = sth * Math.cos(phi_ev);
-        pixVertex[1][3] = sth * Math.sin(phi_ev);
-        pixVertex[2][3] = z;
+        Vector3D east = new Vector3D(sth * Math.cos(phi_ev),  sth * Math.sin(phi_ev), z);
         /* north vertex */
         double sth_nv = Math.sqrt((1.0 - z_nv) * (1.0 + z_nv));
-        pixVertex[0][0] = sth_nv * Math.cos(phi_nv);
-        pixVertex[1][0] = sth_nv * Math.sin(phi_nv);
-        pixVertex[2][0] = z_nv;
+        Vector3D north = new Vector3D(sth_nv * Math.cos(phi_nv), sth_nv * Math.sin(phi_nv), z_nv);
         /* south vertex */
         double sth_sv = Math.sqrt((1.0 - z_sv) * (1.0 + z_sv));
-        pixVertex[0][2] = sth_sv * Math.cos(phi_sv);
-        pixVertex[1][2] = sth_sv * Math.sin(phi_sv);
-        pixVertex[2][2] = z_sv;
-        return new Pixel(pixVect, pixVertex);
+        Vector3D south = new Vector3D(sth_sv * Math.cos(phi_sv), sth_sv * Math.sin(phi_sv),  z_sv);
+        return new Pixel(pixVect, north, south, east, west);
     }
 
     /**
