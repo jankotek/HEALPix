@@ -45,14 +45,7 @@ public final class BitManipulation {
 	 	long msb = (i & magic2);
 	 	return ~(msb/2+lsb*2);
 	 }
-	 /**
-	  * returns i with even bits inverted
-	  * @param i int input word
-	  * @return int word with modified bits
-	  */
-	 static public long invLSB(long i) {
-	 	return (i ^ magic1); // returns exclusive OR with odd bits
-	 }
+
 	 /**
 	  * returns i with odd bits inverted
 	  * @param i int input word
