@@ -40,16 +40,16 @@ public class LongRangeSetTest extends TestCase {
             rs.add(iter.next());
         }
 
-        assert(!rs.contains(0));
-        assert(rs.contains(1));
-        assert(rs.contains(5));
-        assert(rs.contains(10));
-        assert(!rs.contains(11));
-        assert(!rs.contains(29));
-        assert(rs.contains(30));
-        assert(rs.contains(35));
-        assert(rs.contains(40));
-        assert(!rs.contains(41));
+        assert(!rs.contains(0L));
+        assert(rs.contains(1L));
+        assert(rs.contains(5L));
+        assert(rs.contains(10L));
+        assert(!rs.contains(11L));
+        assert(!rs.contains(29L));
+        assert(rs.contains(30L));
+        assert(rs.contains(35L));
+        assert(rs.contains(40L));
+        assert(!rs.contains(41L));
     }
     
     public void testComplement(){
