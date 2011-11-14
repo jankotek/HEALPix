@@ -822,7 +822,7 @@ public class PixTools {
         Vector3D pixVect = new Vector3D(sth * Math.cos(phi), sth * Math.sin(phi), z);
         /* west vertex */
         double phi_wv = phi - hdelta_phi;
-        double pixVertex[][] = new double[3][4];
+
         Vector3D west = new Vector3D(sth * Math.cos(phi_wv), sth * Math.sin(phi_wv),z);
 
         /* east vertex */
@@ -834,7 +834,7 @@ public class PixTools {
         /* south vertex */
         double sth_sv = Math.sqrt((1.0 - z_sv) * (1.0 + z_sv));
         Vector3D south = new Vector3D(sth_sv * Math.cos(phi_sv), sth_sv * Math.sin(phi_sv),  z_sv);
-        return new Pixel(pixVect, north, south, east, west);
+        return new Pixel(pixVect, north, south, west, east);
     }
 
     /**
@@ -849,8 +849,6 @@ public class PixTools {
      * @return  long ipix
      */
     public long ang2pix(double theta, double phi) {
-
-        long ipix1;
 
         if (nside < 1 || nside > ns_max) {
             throw new IllegalArgumentException("Nside should be power of 2 >0 and < "+ns_max);
