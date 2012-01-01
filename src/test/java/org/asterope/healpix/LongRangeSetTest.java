@@ -161,13 +161,13 @@ public class LongRangeSetTest extends TestCase {
     	assertFalse(r1.containsAll(10,20));
     	assertFalse(r1.containsAll(19,19));
     	assertTrue(r1.containsAll(20,20));
-    	assertFalse(r1.containsAll(21,21));
+    	assertTrue(r1.containsAll(21,21));
     	assertTrue(r1.containsAll(20,30));
     	assertFalse(r1.containsAll(25,35));
     	assertTrue(r1.containsAll(30,30));
     	assertFalse(r1.containsAll(31,31));
     	assertFalse(r1.containsAll(35,37));
-    	assertFalse(r1.containsAll(35,45));;
+    	assertFalse(r1.containsAll(35,45));
     	assertTrue(r1.containsAll(40,40));
     	assertFalse(r1.containsAll(45,55));
     	assertFalse(r1.containsAll(60,70));    	
