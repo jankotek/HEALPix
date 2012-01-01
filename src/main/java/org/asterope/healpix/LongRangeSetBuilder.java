@@ -161,7 +161,7 @@ public class LongRangeSetBuilder {
     	for(long i:rs.ranges){
     		//write packed differences between values, this way it ocupies less space
     		long diff = i - last;
-    		LongPacker.packLong(out, diff);
+    		packLong(out, diff);
     		last = i;
     	}
 
@@ -178,11 +178,60 @@ public class LongRangeSetBuilder {
     	long[] arr = new long[size];
     	long last = 0;
     	for(int i =0; i<size;i++){
-    		long v = last + LongPacker.unpackLong(in);
+    		long v = last + unpackLong(in);
     		arr[i] = v;
     		last = v;
     	}
     	return new LongRangeSet(arr,size);
+    }
+
+
+    /**
+     * Pack  non-negative long into output stream.
+     * It will occupy 1-10 bytes depending on value (lower values occupy smaller space)
+     *
+     * @param os
+     * @param value
+     * @throws IOException
+     *
+     * Originally developed for Kryo by Nathan Sweet.
+     * Modified for JDBM by Jan Kotek
+     */
+    static private void packLong(DataOutput os, long value) throws IOException {
+
+        if (value < 0) {
+            throw new IllegalArgumentException("negative value: v=" + value);
+        }
+
+        while ((value & ~0x7FL) != 0) {
+            os.write((((int) value & 0x7F) | 0x80));
+            value >>>= 7;
+        }
+        os.write((byte) value);
+    }
+
+
+    /**
+     * Unpack positive long value from the input stream.
+     *
+     * @param is The input stream.
+     * @return The long value.
+     * @throws java.io.IOException
+     *
+     * Originally developed for Kryo by Nathan Sweet.
+     * Modified for JDBM by Jan Kotek
+     */
+    static private long unpackLong(DataInput is) throws IOException {
+
+        long result = 0;
+        for (int offset = 0; offset < 64; offset += 7) {
+            long b = is.readUnsignedByte();
+            result |= (b & 0x7F) << offset;
+            if ((b & 0x80) == 0) {
+                return result;
+            }
+        }
+        throw new Error("Malformed long.");
     }
 
 
